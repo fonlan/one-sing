@@ -91,6 +91,14 @@ get_server_ip() {
     curl -s4 ip.sb || curl -s4 ifconfig.io || echo "服务器IP"
 }
 
+# 获取证书指纹
+get_cert_fingerprint() {
+    local cert_file=$1
+    if [ -f "$cert_file" ]; then
+        openssl x509 -in "$cert_file" -noout -fingerprint -sha256 | cut -d= -f2
+    fi
+}
+
 # 下载最新开发版sing-box
 download_sing_box() {
     echo -e "${BLUE}正在获取sing-box最新版本...${NC}"
@@ -483,7 +491,7 @@ add_anytls() {
     
     # 获取证书指纹
     local cert_fingerprint
-    cert_fingerprint=$(openssl x509 -in "$cert_file" -noout -fingerprint -sha256 | cut -d= -f2)
+    cert_fingerprint=$(get_cert_fingerprint "$cert_file")
     
     # 生成AnyTLS URL
     local ip
@@ -683,14 +691,6 @@ list_inbounds() {
                 local uuid=$(echo "$inbound" | jq -r '.users[0].uuid')
                 local flow=$(echo "$inbound" | jq -r '.users[0].flow')
                 local server_name=$(echo "$inbound" | jq -r '.tls.server_name')
-                local private_key=$(echo "$inbound" | jq -r '.tls.reality.private_key')
-                
-                # 生成公钥 (Reality 需要额外计算)
-                local public_key=""
-                if [ -x "$SING_BIN" ]; then
-                    local key_output=$($SING_BIN generate reality-keypair --private-key="$private_key")
-                    public_key=$(echo "$key_output" | grep "PublicKey" | awk '{print $2}')
-                fi
                 
                 local vless_url="vless://${uuid}@${ip}:${port}?security=reality&sni=${server_name}&fp=chrome&pbk=${public_key}&flow=${flow}&type=tcp#${ip}:${port}-vless"
                 
@@ -698,9 +698,6 @@ list_inbounds() {
                 echo -e "${CYAN}端口: $port${NC}"
                 echo -e "${CYAN}UUID: $uuid${NC}"
                 echo -e "${CYAN}SNI: $server_name${NC}"
-                if [ -n "$public_key" ]; then
-                    echo -e "${CYAN}Public Key: $public_key${NC}"
-                fi
                 echo -e "${CYAN}Flow: $flow${NC}"
                 echo -e "${GREEN}URL: $vless_url${NC}"
                 ;;
@@ -711,9 +708,7 @@ list_inbounds() {
                 local cert_fingerprint=""
                 
                 # 如果证书文件存在，获取指纹
-                if [ -f "$cert_path" ]; then
-                    cert_fingerprint=$(openssl x509 -in "$cert_path" -noout -fingerprint -sha256 | cut -d= -f2)
-                fi
+                cert_fingerprint=$(get_cert_fingerprint "$cert_path")
                 
                 local anytls_url="anytls://${password}@${ip}:${port}?insecure=1#${ip}:${port}-anytls"
                 
