@@ -352,8 +352,6 @@ add_vless() {
         "www.apple.com"
         "www.cloudflare.com"
         "www.amazon.com"
-        "www.google.com"
-        "github.com"
         "www.tesla.com"
         "www.nvidia.com"
         "www.bing.com"
