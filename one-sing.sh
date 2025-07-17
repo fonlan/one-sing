@@ -677,12 +677,10 @@ list_inbounds() {
     fi
     
     # 处理每个入站协议
+    local idx=1
     jq -c '.inbounds[]' "$SING_CONFIG" | while read -r inbound; do
         local protocol=$(echo "$inbound" | jq -r '.type')
         local port=$(echo "$inbound" | jq -r '.listen_port')
-        local idx=$(jq --arg port "$port" --arg type "$protocol" \
-                       '.inbounds | map(select(.type == $type and .listen_port == ($port | tonumber))) | index(.[0]) + 1' \
-                       "$SING_CONFIG")
         
         # 根据协议类型显示不同信息
         case "$protocol" in
@@ -737,6 +735,9 @@ list_inbounds() {
                 echo -e "${CYAN}端口: $port${NC}"
                 ;;
         esac
+        
+        # 递增索引
+        idx=$((idx+1))
     done
 }
 
