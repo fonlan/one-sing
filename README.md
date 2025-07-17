@@ -27,7 +27,7 @@
    3. Add AnyTLS protocol
    4. View configurations
    5. Delete configurations
-   6. Install/Update
+   6. Update sing-box core
    7. Uninstall service
    8. Restart service
    9. View service status

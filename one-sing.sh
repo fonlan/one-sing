@@ -750,7 +750,7 @@ show_menu() {
     echo -e "${CYAN}4.${NC} 查看已添加的配置"
     echo -e "${CYAN}5.${NC} 删除已添加的配置"
     echo -e "------------------------------${NC}"
-    echo -e "${CYAN}6.${NC} 安装/更新"
+    echo -e "${CYAN}6.${NC} 更新内核"
     echo -e "${CYAN}7.${NC} 卸载服务"
     echo -e "${CYAN}8.${NC} 重启服务"
     echo -e "${CYAN}9.${NC} 查看服务"
@@ -763,14 +763,17 @@ show_menu() {
     case "$choice" in
         1)
             check_root
+            ensure_sing_box_installed
             add_ss2022
             ;;
         2)
             check_root
+            ensure_sing_box_installed
             add_vless
             ;;
         3)
             check_root
+            ensure_sing_box_installed
             add_anytls
             ;;
         4)
@@ -783,15 +786,11 @@ show_menu() {
             ;;
         6)
             check_root
-            check_system
-            check_dependencies
-            setup_work_dir
-            
+            # 确保已安装sing-box，才能执行更新
             if [ -f "$SING_BIN" ]; then
                 update_sing_box
             else
-                download_sing_box
-                create_systemd_service
+                echo -e "${YELLOW}sing-box尚未安装，请先添加一个协议配置以自动安装sing-box${NC}"
             fi
             ;;
         7)
@@ -819,6 +818,19 @@ show_menu() {
     if [ "$choice" != "0" ]; then
         echo -e "\n${YELLOW}按回车键返回主菜单...${NC}"
         read -r
+    fi
+}
+
+# 检查并确保sing-box已安装
+ensure_sing_box_installed() {
+    if [ ! -f "$SING_BIN" ]; then
+        echo -e "${YELLOW}检测到sing-box尚未安装，正在执行安装流程...${NC}"
+        check_system
+        check_dependencies
+        setup_work_dir
+        download_sing_box
+        create_systemd_service
+        echo -e "${GREEN}sing-box安装完成${NC}"
     fi
 }
 
