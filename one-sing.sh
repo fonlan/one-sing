@@ -668,10 +668,21 @@ list_inbounds() {
     local count=0
     
     # 处理每个入站协议
+    # 使用管道前先计算有多少个入站协议
+    count=$(jq '.inbounds | length' "$SING_CONFIG")
+    
+    if [ "$count" -eq 0 ]; then
+        echo -e "${YELLOW}还没有添加任何协议${NC}"
+        return
+    fi
+    
+    # 处理每个入站协议
     jq -c '.inbounds[]' "$SING_CONFIG" | while read -r inbound; do
-        count=$((count+1))
         local protocol=$(echo "$inbound" | jq -r '.type')
         local port=$(echo "$inbound" | jq -r '.listen_port')
+        local idx=$(jq --arg port "$port" --arg type "$protocol" \
+                       '.inbounds | map(select(.type == $type and .listen_port == ($port | tonumber))) | index(.[0]) + 1' \
+                       "$SING_CONFIG")
         
         # 根据协议类型显示不同信息
         case "$protocol" in
@@ -680,7 +691,7 @@ list_inbounds() {
                 local password=$(echo "$inbound" | jq -r '.password')
                 local ss_url="ss://$(echo -n "${method}:${password}" | base64 | tr -d '\n')@${ip}:${port}#${ip}:${port}-ss2022"
                 
-                echo -e "\n${YELLOW}[$count] SS2022 协议${NC}"
+                echo -e "\n${YELLOW}[$idx] SS2022 协议${NC}"
                 echo -e "${CYAN}端口: $port${NC}"
                 echo -e "${CYAN}密码: $password${NC}"
                 echo -e "${CYAN}加密方式: $method${NC}"
@@ -694,7 +705,7 @@ list_inbounds() {
                 
                 local vless_url="vless://${uuid}@${ip}:${port}?security=reality&sni=${server_name}&fp=chrome&pbk=${public_key}&flow=${flow}&type=tcp#${ip}:${port}-vless"
                 
-                echo -e "\n${YELLOW}[$count] VLESS Reality 协议${NC}"
+                echo -e "\n${YELLOW}[$idx] VLESS 协议${NC}"
                 echo -e "${CYAN}端口: $port${NC}"
                 echo -e "${CYAN}UUID: $uuid${NC}"
                 echo -e "${CYAN}SNI: $server_name${NC}"
@@ -712,7 +723,7 @@ list_inbounds() {
                 
                 local anytls_url="anytls://${password}@${ip}:${port}?insecure=1#${ip}:${port}-anytls"
                 
-                echo -e "\n${YELLOW}[$count] AnyTLS 协议${NC}"
+                echo -e "\n${YELLOW}[$idx] AnyTLS 协议${NC}"
                 echo -e "${CYAN}端口: $port${NC}"
                 echo -e "${CYAN}密码: $password${NC}"
                 if [ -n "$cert_fingerprint" ]; then
@@ -722,15 +733,11 @@ list_inbounds() {
                 ;;
             
             *)
-                echo -e "\n${YELLOW}[$count] $protocol 协议${NC}"
+                echo -e "\n${YELLOW}[$idx] $protocol 协议${NC}"
                 echo -e "${CYAN}端口: $port${NC}"
                 ;;
         esac
     done
-    
-    if [ $count -eq 0 ]; then
-        echo -e "${YELLOW}还没有添加任何配置${NC}"
-    fi
 }
 
 # 显示菜单
