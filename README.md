@@ -22,16 +22,16 @@
    ```
 
 2. **Select an option from the menu**
-   - 1. Install/Update
-   - 2. Uninstall
-   - 3. Add SS2022 protocol
-   - 4. Add VLESS Reality protocol
-   - 5. Add AnyTLS protocol
-   - 6. Delete added protocol
-   - 7. Restart service
-   - 8. View service status
-   - 9. View added protocol configurations
-   - 0. Exit script
+   1. Add SS2022 protocol
+   2. Add VLESS  protocol
+   3. Add AnyTLS protocol
+   4. View configurations
+   5. Delete configurations
+   6. Install/Update
+   7. Uninstall service
+   8. Restart service
+   9. View service status
+   0. Exit script
 
 ## Dependencies
 
