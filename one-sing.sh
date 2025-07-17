@@ -321,11 +321,7 @@ add_ss2022() {
       "listen": "::",
       "listen_port": '"$port"',
       "method": "'"$method"'",
-      "password": "'"$password"'",
-      "multiplex": {
-        "enabled": true,
-        "padding": false
-      }
+      "password": "'"$password"'"
     }]' "$SING_CONFIG" > "$temp_config"
     mv "$temp_config" "$SING_CONFIG"
     
