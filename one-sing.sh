@@ -304,7 +304,7 @@ add_ss2022() {
     local port
     port=$(generate_random_port)
     local password
-    password=$(generate_random_password 24)
+    password=$(generate_random_password 32)
     
     echo -e "${BLUE}正在添加SS2022协议...${NC}"
     
@@ -312,7 +312,7 @@ add_ss2022() {
     create_base_config
     
     # 添加SS2022配置
-    local method="2022-blake3-aes-128-gcm"
+    local method="2022-blake3-aes-256-gcm"
     local temp_config
     temp_config=$(mktemp)
     jq '.inbounds += [{
