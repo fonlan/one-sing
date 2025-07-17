@@ -80,12 +80,6 @@ generate_random_port() {
     done
 }
 
-# 生成随机字符串密码
-generate_random_password() {
-    local length=$1
-    tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c $length
-}
-
 # 获取服务器IP地址
 get_server_ip() {
     curl -s4 ip.sb || curl -s4 ifconfig.io || echo "服务器IP"
@@ -304,7 +298,7 @@ add_ss2022() {
     local port
     port=$(generate_random_port)
     local password
-    password=$(generate_random_password 32)
+    password=$(openssl rand -base64 32)
     
     echo -e "${BLUE}正在添加SS2022协议...${NC}"
     
@@ -317,7 +311,7 @@ add_ss2022() {
     temp_config=$(mktemp)
     jq '.inbounds += [{
       "type": "shadowsocks",
-      "tag": "ss-in-'"$port"'",
+      "tag": "ss2022-in-'"$port"'",
       "listen": "::",
       "listen_port": '"$port"',
       "method": "'"$method"'",
@@ -440,7 +434,7 @@ add_anytls() {
     local port
     port=$(generate_random_port)
     local password
-    password=$(generate_random_password 16)
+    password=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 16)
     
     echo -e "${BLUE}正在添加AnyTLS协议...${NC}"
     
