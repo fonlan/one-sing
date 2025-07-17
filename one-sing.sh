@@ -304,7 +304,7 @@ add_ss2022() {
     local port
     port=$(generate_random_port)
     local password
-    password=$(generate_random_password 32)
+    password=$(generate_random_password 16)
     
     echo -e "${BLUE}正在添加SS2022协议...${NC}"
     
