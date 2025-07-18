@@ -22,16 +22,18 @@
    ```
 
 - **Select an option from the menu**
-   1) Add SS2022 protocol
-   2) Add VLESS  protocol
-   3) Add AnyTLS protocol
-   4) View configurations
-   5) Delete configurations
-   6) Update sing-box core
-   7) Uninstall service
-   8) Restart service
-   9) View service status
-   0) Exit script
+   ```
+   1. Add SS2022 protocol
+   2. Add VLESS  protocol
+   3. Add AnyTLS protocol
+   4. View configurations
+   5. Delete configurations
+   6. Update sing-box core
+   7. Uninstall service
+   8. Restart service
+   9. View service status
+   0. Exit script
+   ```
 
 ## Dependencies
 
