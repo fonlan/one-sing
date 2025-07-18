@@ -16,12 +16,12 @@
 
 ## Usage
 
-1. **Run the command**
+- **Run the command**
    ```bash
    bash <(curl -Ls https://raw.githubusercontent.com/fonlan/one-sing/refs/heads/main/one-sing.sh)
    ```
 
-2. **Select an option from the menu**
+- **Select an option from the menu**
    1. Add SS2022 protocol
    2. Add VLESS  protocol
    3. Add AnyTLS protocol
