@@ -771,21 +771,21 @@ show_menu() {
     else
         echo -e "${YELLOW}● sing-box 尚未安装${NC}"
     fi
-    echo -e "-------------------------------${NC}"
+    echo -e "-------------------------${NC}"
 
     echo -e "${CYAN}1.${NC} 添加 SS2022 配置"
     echo -e "${CYAN}2.${NC} 添加 VLESS  配置"
     echo -e "${CYAN}3.${NC} 添加 AnyTLS 配置"
     echo -e "${CYAN}4.${NC} 查看已添加的配置"
     echo -e "${CYAN}5.${NC} 删除已添加的配置"
-    echo -e "-------------------------------${NC}"
+    echo -e "-------------------------${NC}"
     echo -e "${CYAN}6.${NC} 更新内核"
     echo -e "${CYAN}7.${NC} 卸载服务"
     echo -e "${CYAN}8.${NC} 重启服务"
     echo -e "${CYAN}9.${NC} 查看服务"
-    echo -e "-------------------------------${NC}"
+    echo -e "-------------------------${NC}"
     echo -e "${CYAN}0.${NC} 退出脚本"
-    echo -e "-------------------------------${NC}"
+    echo -e "-------------------------${NC}"
     echo -ne "\n${YELLOW}请输入选项 [0-9]:${NC} "
     read -r choice
 
