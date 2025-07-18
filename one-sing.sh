@@ -746,6 +746,33 @@ list_inbounds() {
 # 显示菜单
 show_menu() {
     echo -e "\n${PURPLE}=== One-Sing 管理脚本 ===${NC}"
+
+    # 显示服务运行状态
+    echo -e "${BLUE}[ 服务状态 ]${NC}"
+    if [ -f "$SING_BIN" ]; then
+        if systemctl is-active --quiet $SING_SERVICE; then
+            echo -e "${GREEN}● sing-box 服务正在运行${NC}"
+
+            # 显示已配置的协议数量
+            if [ -f "$SING_CONFIG" ]; then
+                local count
+                count=$(jq '.inbounds | length' "$SING_CONFIG")
+                if [ "$count" -gt 0 ]; then
+                    echo -e "${GREEN}● 已配置 $count 个协议${NC}"
+                else
+                    echo -e "${YELLOW}● 尚未配置任何协议${NC}"
+                fi
+            else
+                echo -e "${YELLOW}● 尚未配置任何协议${NC}"
+            fi
+        else
+            echo -e "${RED}● sing-box 服务未运行${NC}"
+        fi
+    else
+        echo -e "${YELLOW}● sing-box 尚未安装${NC}"
+    fi
+    echo -e "-------------------------------${NC}"
+
     echo -e "${CYAN}1.${NC} 添加 SS2022 配置"
     echo -e "${CYAN}2.${NC} 添加 VLESS  配置"
     echo -e "${CYAN}3.${NC} 添加 AnyTLS 配置"
