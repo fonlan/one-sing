@@ -96,7 +96,7 @@ get_cert_fingerprint() {
 # 获取sing-box版本
 get_sing_box_version() {
     if [ -f "$SING_BIN" ]; then
-        "$SING_BIN" version | grep "version" | cut -d' ' -f2
+        "$SING_BIN" version | grep "version" | cut -d' ' -f3
     else
         echo "未安装"
     fi
