@@ -93,6 +93,15 @@ get_cert_fingerprint() {
     fi
 }
 
+# 获取sing-box版本
+get_sing_box_version() {
+    if [ -f "$SING_BIN" ]; then
+        "$SING_BIN" version | grep "version" | cut -d' ' -f2
+    else
+        echo "未安装"
+    fi
+}
+
 # 下载最新开发版sing-box
 download_sing_box() {
     echo -e "${BLUE}正在获取sing-box最新版本...${NC}"
@@ -753,8 +762,11 @@ show_menu() {
     # 显示服务运行状态
     echo -e "${BLUE}[ 服务状态 ]${NC}"
     if [ -f "$SING_BIN" ]; then
+        local version
+        version=$(get_sing_box_version)
+
         if systemctl is-active --quiet $SING_SERVICE; then
-            echo -e "${GREEN}● sing-box 服务正在运行${NC}"
+            echo -e "${GREEN}● sing-box $version 服务正在运行${NC}"
 
             # 显示已配置的协议数量
             if [ -f "$SING_CONFIG" ]; then
