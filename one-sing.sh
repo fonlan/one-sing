@@ -481,6 +481,15 @@ add_anytls() {
           "password": "'"$password"'"
         }
       ],
+      "padding_scheme": [
+        "stop=6",
+        "0=30-30",
+        "1=80-120",
+        "2=350-550,c",
+        "3=900-1400",
+        "4=250-600",
+        "5=250-600"
+      ],
       "tls": {
         "enabled": true,
         "certificate_path": "'"$cert_file"'",
